@@ -21,6 +21,17 @@ A JT/T 809 superior-platform (上级平台) simulator server for debugging subor
 - **协议层**：TCP 粘包/拆包处理、数据转义、CRC16-CCITT 校验、编解码全套实现
 - **运维接口**：HTTP REST 接口下发主/从链路消息；Redis 缓存下行消息；可选 Kafka 输出
 
+## 模块结构
+
+Maven 多模块工程（Java 17 / Spring Boot 3.2）：
+
+| 模块 | 说明 |
+| --- | --- |
+| `jt809-base` | 基础工具：BCD/Bits/CRC16 编解码工具、字节缓冲池化、序列化基础 |
+| `jt809-protocol` | 协议抽象：消息 ID 与子业务类型枚举、版本化规范上下文、报文读写接口 |
+| `jt809-netty-codec` | 报文实体与 Netty 编解码：主/从链路、动态/静态信息交换、报警、下行控制、JT/T 1078 |
+| `jt809-top-server` | 上级平台模拟服务（Spring Boot 应用）：链路管理、调度任务、REST 下发接口 |
+
 ## 技术栈
 
 - Java 17 / Spring Boot 3
@@ -36,11 +47,11 @@ git clone https://github.com/<your-account>/jt809-top-server.git
 cd jt809-top-server
 
 # 2. 按需修改配置（端口、Redis、下级平台接入校验账号）
-vim src/main/resources/application.properties
+vim jt809-top-server/src/main/resources/application.properties
 
-# 3. 编译运行
+# 3. 编译运行（多模块在根目录统一构建）
 mvn clean package -DskipTests
-java -jar target/jt809-top-server.jar
+java -jar jt809-top-server/target/jt809-top-server.jar
 ```
 
 启动后监听两个端口：
@@ -60,7 +71,7 @@ java -jar target/jt809-top-server.jar
 | `business.isopen-client` | 是否启动从链路客户端 |
 | `spring.data.redis.*` | Redis 地址与密码 |
 
-仓库内的 `src/main/resources/testData.txt` 收录了若干真实协议报文十六进制样例，可用于对照解析结果做单元调试。
+仓库内的 `jt809-top-server/src/main/resources/testData.txt` 收录了若干真实协议报文十六进制样例，可用于对照解析结果做单元调试。
 
 ## 参考标准
 
