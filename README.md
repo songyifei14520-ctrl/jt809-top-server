@@ -43,7 +43,7 @@ Maven 多模块工程（Java 17 / Spring Boot 3.2）：
 
 ```bash
 # 1. 克隆
-git clone https://github.com/<your-account>/jt809-top-server.git
+git clone https://github.com/songyifei14520-ctrl/jt809-top-server.git
 cd jt809-top-server
 
 # 2. 按需修改配置（端口、Redis、下级平台接入校验账号）
